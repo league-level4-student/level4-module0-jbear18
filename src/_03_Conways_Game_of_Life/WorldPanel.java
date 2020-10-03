@@ -185,13 +185,7 @@ this.cellSize=width;
 			boolean right= e.getX()<=current.getX()+ cellSize;
 			boolean top= e.getY()>=current.getY();
 			boolean bottom=e.getY()<=current.getY()+ cellSize;
-			if (i == 0 && j ==0) {
-				System.out.println(cellSize);
-				System.out.println(left);
-				System.out.println(right);
-				System.out.println(top);
-				System.out.println(bottom);
-			}
+			
 			if(left&&right&&top&&bottom) {
 				
 			if(current.isAlive==true) {
