@@ -22,10 +22,10 @@ public class MazeMaker{
 		maze = new Maze(width, height);
 		
 		//4. select a random cell to start
-		
+		Cell random= maze.getCell(randGen.nextInt(width), randGen.nextInt(height));
 		
 		//5. call selectNextPath method with the randomly selected cell
-		
+	selectNextPath(random);
 		
 		return maze;
 	}
@@ -33,22 +33,60 @@ public class MazeMaker{
 	//6. Complete the selectNextPathMethod
 	private static void selectNextPath(Cell currentCell) {
 		//A. mark cell as visited
-
+currentCell.setBeenVisited(true);
 		//B. Get an ArrayList of unvisited neighbors using the current cell and the method below
-		
-		//C. if has unvisited neighbors,
-		
-			//C1. select one at random.
-			
-			//C2. push it to the stack
-		
-			//C3. remove the wall between the two cells
+		//currentCell
+// getUnvisitedNeighbors(Cell c)
+ArrayList<Cell> unvisited= new ArrayList<Cell>();
+Cell leftNeighbor= maze.getCell(currentCell.getX()-1, currentCell.getY());
+Cell rightNeighbor=maze.getCell(currentCell.getX()+1,currentCell.getY());
+Cell upperNeighbor= maze.getCell(currentCell.getX(), currentCell.getY()-1);
+Cell lowerNeighbor= maze.getCell(currentCell.getX(), currentCell.getY()+1);
+if(leftNeighbor.hasBeenVisited()==false) {
+	unvisited.add(leftNeighbor);
+}
+if(rightNeighbor.hasBeenVisited()==false) {
+	unvisited.add(rightNeighbor);
+}
+if(upperNeighbor.hasBeenVisited()==false) {
+	unvisited.add(upperNeighbor);
+}
+if(lowerNeighbor.hasBeenVisited()==false) {
+	unvisited.add(lowerNeighbor);
+}
+	
 
+		//C. if has unvisited neighbors,
+	if(unvisited.size()>0) {
+		
+	
+			//C1. select one at random.
+		 int randomInt= randGen.nextInt(unvisited.size());	
+			//C2. push it to the stack
+		Cell randomCell= unvisited.get(randomInt);
+		uncheckedCells.push(randomCell);
+			//C3. remove the wall between the two cells
+		if(randomCell==lowerNeighbor) {
+			randomCell.setSouthWall(false);
+			currentCell.setNorthWall(false);
+		}
+		if(randomCell==leftNeighbor) {
+			randomCell.setWestWall(false);
+			currentCell.setEastWall(false);
+		}
+		if(randomCell==upperNeighbor) {
+			randomCell.setNorthWall(false);
+			currentCell.setSouthWall(false);
+		}
+		if(randomCell==rightNeighbor) {
+			randomCell.setEastWall(false);
+			currentCell.setWestWall(false);
+		}
 			//C4. make the new cell the current cell and mark it as visited
 		
 			//C5. call the selectNextPath method with the current cell
 			
-			
+	}	
 		//D. if all neighbors are visited
 		
 			//D1. if the stack is not empty
