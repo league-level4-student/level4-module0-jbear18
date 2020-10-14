@@ -14,7 +14,11 @@ public class MazeMaker{
 	
 	private static Random randGen = new Random();
 	private static Stack<Cell> uncheckedCells = new Stack<Cell>();
-	
+
+	static Cell leftNeighbor;
+	static Cell rightNeighbor;
+	static Cell upperNeighbor;
+	static Cell lowerNeighbor;
 	
 	public static Maze generateMaze(int w, int h){
 		width = w;
@@ -37,23 +41,7 @@ currentCell.setBeenVisited(true);
 		//B. Get an ArrayList of unvisited neighbors using the current cell and the method below
 		//currentCell
 // getUnvisitedNeighbors(Cell c)
-ArrayList<Cell> unvisited= new ArrayList<Cell>();
-Cell leftNeighbor= maze.getCell(currentCell.getX()-1, currentCell.getY());
-Cell rightNeighbor=maze.getCell(currentCell.getX()+1,currentCell.getY());
-Cell upperNeighbor= maze.getCell(currentCell.getX(), currentCell.getY()-1);
-Cell lowerNeighbor= maze.getCell(currentCell.getX(), currentCell.getY()+1);
-if(leftNeighbor.hasBeenVisited()==false) {
-	unvisited.add(leftNeighbor);
-}
-if(rightNeighbor.hasBeenVisited()==false) {
-	unvisited.add(rightNeighbor);
-}
-if(upperNeighbor.hasBeenVisited()==false) {
-	unvisited.add(upperNeighbor);
-}
-if(lowerNeighbor.hasBeenVisited()==false) {
-	unvisited.add(lowerNeighbor);
-}
+ArrayList<Cell> unvisited= getUnvisitedNeighbors(currentCell);
 	
 
 		//C. if has unvisited neighbors,
@@ -83,35 +71,87 @@ if(lowerNeighbor.hasBeenVisited()==false) {
 			currentCell.setWestWall(false);
 		}
 			//C4. make the new cell the current cell and mark it as visited
-		
+		 currentCell= randomCell;
+		currentCell.setBeenVisited(true);
 			//C5. call the selectNextPath method with the current cell
-			
+	selectNextPath(currentCell);
 	}	
 		//D. if all neighbors are visited
+		boolean visited=true;
+	if(lowerNeighbor!=null&&!lowerNeighbor.hasBeenVisited()){
+		visited=false;
+	}
+	if(upperNeighbor!=null&&!upperNeighbor.hasBeenVisited()) {
+		visited=false;
+	}
+	if(leftNeighbor!=null&&!leftNeighbor.hasBeenVisited()) {
+		visited=false;
+	}
+	if(rightNeighbor!=null&&!rightNeighbor.hasBeenVisited()) {
+		visited=false;
+	}
+	if(visited) {
 		
+	
 			//D1. if the stack is not empty
-			
-				// D1a. pop a cell from the stack
-		
-				// D1b. make that the current cell
-		
-				// D1c. call the selectNextPath method with the current cell
+			if(uncheckedCells.isEmpty()==false) {
 				
 			
+				// D1a. pop a cell from the stack
+	Cell newCurrent=	uncheckedCells.pop();
+				// D1b. make that the current cell
+		currentCell= newCurrent;
+				// D1c. call the selectNextPath method with the current cell
+		selectNextPath(currentCell);
+			}	
+		}	
 		
 	}
 
 	//7. Complete the remove walls method.
 	//   This method will check if c1 and c2 are adjacent.
 	//   If they are, the walls between them are removed.
-	private static void removeWalls(Cell c1, Cell c2) {
-		
-	}
+
 	
 	//8. Complete the getUnvisitedNeighbors method
 	//   Any unvisited neighbor of the passed in cell gets added
 	//   to the ArrayList
-	private static ArrayList<Cell> getUnvisitedNeighbors(Cell c) {
-		return null;
+	private static ArrayList<Cell> getUnvisitedNeighbors(Cell currentCell) {
+		ArrayList<Cell> unvisited= new ArrayList<Cell>();
+	if(currentCell.getX()>0) {
+		leftNeighbor= maze.getCell(currentCell.getX()-1, currentCell.getY());
+		if(leftNeighbor.hasBeenVisited()==false) {
+			unvisited.add(leftNeighbor);
+		}
+	}else {
+		leftNeighbor=null;
+	}
+	if(currentCell.getX()<width-1) {
+		rightNeighbor=maze.getCell(currentCell.getX()+1,currentCell.getY());
+
+		if(rightNeighbor.hasBeenVisited()==false) {
+			unvisited.add(rightNeighbor);
+		}
+	}else {
+		rightNeighbor=null;
+	}
+	if(currentCell.getY()>0) {
+		upperNeighbor= maze.getCell(currentCell.getX(), currentCell.getY()-1);
+		if(upperNeighbor.hasBeenVisited()==false) {
+			unvisited.add(upperNeighbor);
+		}
+	}else {
+		upperNeighbor=null;
+	}
+	if(currentCell.getY()<height-1) {
+		lowerNeighbor= maze.getCell(currentCell.getX(), currentCell.getY()+1);
+		if(lowerNeighbor.hasBeenVisited()==false) {
+			unvisited.add(lowerNeighbor);
+		}
+	}else {
+		lowerNeighbor=null;
+	}
+
+		return unvisited;
 	}
 }
